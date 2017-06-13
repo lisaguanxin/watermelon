@@ -6,8 +6,9 @@ var totalDrops = 0;
 
 function setup() {
     createCanvas(640, 480); //create a canvas
-    this.catcher = new Catcher(32); //create catcher with a radius of 32
-    this.drops = new Drop()[1000]; //create 1000 spots in the array ?????
+    catcher = new Catcher(32); //create catcher with a radius of 32
+    drops = new Drop(640, 480)[1000]; //create 1000 spots in the array ?????
+    timer = new Timer(300);
     timer.start(); //starting the timer
 }
 
@@ -58,84 +59,64 @@ function Catcher(tempR) {
     };
 }
 
-//drop class
-var x;
-var y; // Variables for location of raindrop
-var speed; // Speed of raindrop
-var c;
-var r; // Radius of raindrop
 
-function Drop() {
+function Drop(width, height) {
+    this.width = width;
+    this.height = height;
     this.r = 8; // All raindrops are the same size
-    this.x = random(width); // Start with a random x location
-    this.y = -r * 4; // Start a little above the window
+    this.x = random(this.width); // Start with a random x location
+    this.y = -this.r * 4; // Start a little above the window
     this.speed = random(1, 5); // Pick a random speed
     this.c = color(50, 100, 150); // Color
-}
 
-// Move the raindrop down
-function move() {
-    // Increment by speed
-    this.y += speed;
-}
+    // Move the raindrop down
+    function move() {
+        // Increment by speed
+        this.y += this.speed;
+    }
 
-// Check if it hits the bottom
-function reachedBottom() {
-    // If we go a little beyond the bottom
-    if (y > height + r * 4) {
-        return true;
-    } else {
-        return false;
+    // Check if it hits the bottom
+    function reachedBottom() {
+        // If we go a little beyond the bottom
+        if (this.y > this.height + this.r * 4) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // Display the raindrop
+    function display() {
+        // Display the drop
+        fill(this.c);
+        noStroke();
+        for (var i = 2; i < this.r; i++) {
+            ellipse(this.x, this.y + i * 4, i * 2, i * 2);
+        }
+    }
+
+    // If the drop is caught
+    function caught() {
+        // Stop it from moving by setting speed equal to zero
+        this.speed = 0;
+        // Set the location to somewhere way off-screen
+        this.y = -1000;
     }
 }
 
-// Display the raindrop
-function display() {
-    // Display the drop
-    fill(c);
-    noStroke();
-    for (var i = 2; i < r; i++) {
-        ellipse(x, y + i * 4, i * 2, i * 2);
-    }
-}
-
-// If the drop is caught
-function caught() {
-    // Stop it from moving by setting speed equal to zero
-    speed = 0;
-    // Set the location to somewhere way off-screen
-    y = -1000;
-}
-}
-
-//timer class
-var savedTime; //when timers started
-var totalTime; //how long timer should last
-
-funtion(tempTotalTime) {
+function Timer(tempTotalTime) {
     this.totalTime = tempTotalTime;
-}
 
-fuction start() {
-    this.savedtime = millis(); //store the current time in milliseconds;
-}
+    this.start = function() {
+        this.savedtime = millis(); //store the current time in milliseconds;
+    };
 
-function isFinished() {
-    var passedTime = millis() - savedTime;
-    if (passedTime > totalTime) {
-        return true;
-    } else {
-        return false;
-    }
-}
-}
-
-
-
-
-
-
-
-
-
+    this.isFinished = function() {
+        this.passedTime = millis() - this.savedTime;
+        if (this.passedTime > this.totalTime) {
+            return true;
+        } else {
+            return false;
+        }
+    };
 }
